@@ -1,0 +1,56 @@
+=== ip -br addr ===
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             UP             10.0.0.2/24 fd17:625c:f037:2:ba65:fa87:3eca:d7d/64 fe80::3e7d:1f3c:1b67:1393/64 
+docker0          DOWN           172.17.0.1/16 
+
+=== ip route ===
+default via 10.0.0.1 dev eth0 proto static metric 100 
+10.0.0.0/24 dev eth0 proto kernel scope link src 10.0.0.2 metric 100 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
+
+=== ping -c 4 10.0.0.1 ===
+PING 10.0.0.1 (10.0.0.1) 56(84) bytes of data.
+From 10.0.0.2 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.2 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.2 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.2 icmp_seq=4 Destination Host Unreachable
+
+--- 10.0.0.1 ping statistics ---
+4 packets transmitted, 0 received, +4 errors, 100% packet loss, time 3056ms
+pipe 3
+
+=== ping -c 4 8.8.8.8 ===
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+From 10.0.0.2 icmp_seq=1 Destination Host Unreachable
+From 10.0.0.2 icmp_seq=2 Destination Host Unreachable
+From 10.0.0.2 icmp_seq=3 Destination Host Unreachable
+From 10.0.0.2 icmp_seq=4 Destination Host Unreachable
+
+--- 8.8.8.8 ping statistics ---
+4 packets transmitted, 0 received, +4 errors, 100% packet loss, time 3068ms
+pipe 3
+
+=== nslookup networkwalks.com ===
+;; communications error to 8.8.8.8#53: host unreachable
+;; communications error to 8.8.8.8#53: host unreachable
+;; communications error to 8.8.8.8#53: host unreachable
+Server:		fd17:625c:f037:2::3
+Address:	fd17:625c:f037:2::3#53
+
+Non-authoritative answer:
+Name:	networkwalks.com
+Address: 192.232.216.135
+;; communications error to 8.8.8.8#53: host unreachable
+;; communications error to 8.8.8.8#53: host unreachable
+;; communications error to 8.8.8.8#53: host unreachable
+
+
+=== nmap --version ===
+Nmap version 7.991 ( https://nmap.org )
+Platform: x86_64-pc-linux-gnu
+Compiled with: liblua-5.4.9 openssl-3.6.5 libssh2-1.11.1 libz-1.3.2 libpcre2-10.49 libpcap-1.11.0 nmap-libdnet-1.18.0 ipv6
+Compiled without:
+Available nsock engines: epoll poll select
+
+=== ls -ld /media/sf_downloads ===
+drwxrwx--- 1 root vboxsf 0 Nov 18 10:59 /media/sf_downloads
